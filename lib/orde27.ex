@@ -7,6 +7,18 @@ defmodule Orde27 do
   - [オフラインリアルタイムどう書く E27](https://yhpg.doorkeeper.jp/events/79705)
   """
 
+  def split([n | ns]), do: split(ns, [[n]])
+
+  def split([], acc), do: Enum.reverse(acc) |> Enum.map(&Enum.reverse/1)
+  def split([n2 | rest], [[n1 | _] = a1 | acc]) when n2 == n1 + 1, do: split(rest, [[n2 | a1] | acc])
+  def split([n | rest], acc), do: split(rest, [[n] | acc])
+
+  def stories(cards) do
+  end
+
+  def kinds(_cards) do
+  end
+
   def solve(input) do
     input
   end
