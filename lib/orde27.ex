@@ -13,14 +13,40 @@ defmodule Orde27 do
   def split([n2 | rest], [[n1 | _] = a1 | acc]) when n2 == n1 + 1, do: split(rest, [[n2 | a1] | acc])
   def split([n | rest], acc), do: split(rest, [[n] | acc])
 
-  def stories(cards) do
+  def stories([card | cards]), do: stories(cards, [[card]])
+
+  def stories([], acc) do
+    acc
+    |> Enum.reduce({[], []}, fn cards, {ss, rest} ->
+      case cards do
+        [card] ->
+          {ss, [card | rest]}
+
+        _ ->
+          {[cards | ss], rest}
+      end
+    end)
+  end
+
+  def stories([[suit, lank] = card | rest], [a1 | acc]) do
+    if Enum.member?(rest, [suit, lank + 1]) do
+      stories(rest, [[card | a1] | acc])
+    else
+      stories(rest, [[card] | [a1 |acc]])
+    end
   end
 
   def kinds(_cards) do
   end
 
   def solve(input) do
-    input
+    cards =
+      input
+      |> String.split(",")
+      |> Enum.map(&String.to_charlist/1)
+      |> Enum.sort()
+
+    inspect stories(cards)
   end
 
   c_styled_test_data """
